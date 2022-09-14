@@ -1,0 +1,25 @@
+name: SMP-Apps-Java-CI
+
+on:
+  workflow_dispatch:
+    inputs:
+      Branch:
+        description: 'Branch to Build'
+        required: true
+        default: 'master'
+
+env:
+  # AWS_REGION: eu-central-
+
+jobs:
+  build-test-scan:
+    runs-on: ubuntu-20.04
+    # outputs:
+    #   VERSION_NUM: ${{ steps.set-version.outputs.VERSION_NUM }}
+    #   CHANNEL_NAME: ${{ steps.set-version.outputs.CHANNEL_NAME }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          ref: '${{ github.event.inputs.Branch }}'
+
+      

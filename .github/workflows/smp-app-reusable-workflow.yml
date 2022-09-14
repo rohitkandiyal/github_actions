@@ -1,0 +1,54 @@
+name: SMP-Apps-Java-CI-Reusable-Workflow
+
+on:
+  workflow_dispatch:
+    inputs:
+      Branch:
+        description: 'Branch to Build'
+        required: true
+        default: 'develop'
+
+jobs:
+  build-test-scan:
+    uses: bcg-ep-smp/github-action-reusable-workflows/.github/workflows/Java-Gradle-WF.yaml@develop
+    with:
+      branch: '${{ github.event.inputs.Branch }}'
+      service_name: 'platform-authentication2'
+      java_version: '17'                                 #Defaults to java11
+
+      #Azure Key vault Variables
+      key_array: 'DOCKER-USERNAME,DOCKER-PASSWORD,HELM-USERNAME,HELM-PASSWORD,PRISMA-CLOUD-ACCESSKEY,PRISMA-CLOUD-SECRETKEY,PRISMA-CLOUD-CONSOLE-URL,SMP-APP-VERACODE-API-ID,SMP-APP-VERACODE-API-KEY,OCTOPUS-HOST,OCTOPUS-API-KEY'
+
+      # Docker variables
+      docker_registry: 'bcgprod.jfrog.io'
+      docker_image: 'bcgprod.jfrog.io/smp-docker-virtual/platform-authentication2'
+
+      # Veracode variables
+      veracode_app_name: 'SMP Platform Authentication'
+
+      # Helm Variables
+      helm_repo_url: 'https://bcgprod.jfrog.io/artifactory/smp-helm-virtual'
+      #helm_push_plugin_version: ''                          # Defaults to 1.0.1
+      helm_chart_name: 'platform-authentication2'
+      helm_chart_dir: 'platform-authentication2'
+      #helm_version: ''                                      # Defaults to v3.4.0
+
+      # Octopus Variables
+      octopus_space: "PlatformServicesDev"
+      octopus_project_group: "platform-services-dev-integration"
+      octopus_project: "Platform-Authentication2"
+      octopus_lifecycle: "protected-shared-instance-kops-lifecycle"
+      octopus_prerelease_lifecycle: "protected-shared-instance-kops-lifecycle"
+      octopus_deployment_package: "Deploy Helm Upgrade/ValuesPack-1"
+      octopus_release_lifecycle: "protected-shared-instance-kops-lifecycle"
+      octopus_worker_pool: "SMP STATIC HOSTED UBUNTU WORKER POOL HELM-3-3-4"
+      kong_step_name: "SMP-Kong-Routes-Registry-Linux"
+      octopus_helm_template: "SMP-Deploy-Helm3-Upgrades-Linux"
+      smp_api_gateway_conf_tool_ver: "2.4.0"
+#      octopus_client_version: ""                           # Defaults to 2
+#      octopus_client_image: ""                             # Defaults to bcgprod.jfrog.io/smp-docker-virtual/octopus-client
+
+    secrets:
+      azure_secret: ${{ secrets.AKV_EP_SMP_CI_SECRET }}
+      vault_name: ${{ secrets.AKV_EP_SMP_CI_VAULT_NAME }}
+
