@@ -45,11 +45,20 @@ jobs:
           # change_path: "src/my-service"
           # Named version, will be used as suffix for name version tag
           # namespace: my-service
+          # Indicate whether short tags like 'v1' should be supported. If false only full
+          # tags like 'v1.0.0' will be recognized.
+          # short_tags: true
           # If this is set to true, *every* commit will be treated as a new version.
-          bump_each_commit: false
-          # If true, the body of commits will also be searched for major/minor patterns to determine the version type.
-          search_commit_body: false
-          # The output method used to generate list of users, 'csv' or 'json'.
-          user_format_type: "csv"
+          # bump_each_commit: false
+      
+      - name: Show version
+        run: |
+          echo ${{ steps.set-semantic-version.outputs.version }}
+          echo ${{ steps.set-semantic-version.outputs.version_tag }}
+          echo ${{ steps.set-semantic-version.outputs.increment }}
+        shell: bash
+         
+          
+          
 
       
