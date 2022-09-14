@@ -9,7 +9,7 @@ on:
         default: 'master'
 
 env:
-  # AWS_REGION: eu-central-
+  AWS_REGION: eu-central-1
 
 jobs:
   build-test-scan:
